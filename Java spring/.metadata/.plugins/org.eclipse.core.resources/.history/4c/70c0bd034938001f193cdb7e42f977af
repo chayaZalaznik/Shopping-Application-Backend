@@ -1,0 +1,32 @@
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeRequests(requests -> requests
+                        .requestMatchers("/h2-console/**").permitAll()  // Permit access to H2 console
+                        .requestMatchers("/api/users/signup", "/api/users/login").permitAll()  // Permit access to signup and login APIs
+                        .requestMatchers("/api/item").permitAll() // Allow access to /api/item without authentication
+                        .requestMatchers("/api/users/**").authenticated() // Require authentication for /api/users/**
+                        .anyRequest().permitAll()) // All other requests are permitted without authentication
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Use stateless session
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+
+        http.headers().frameOptions().sameOrigin(); // Allow H2 console to be accessed
+
+        return http.build();
+    }
+}

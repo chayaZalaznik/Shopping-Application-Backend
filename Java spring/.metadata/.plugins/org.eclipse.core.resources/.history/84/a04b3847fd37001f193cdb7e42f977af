@@ -1,0 +1,4 @@
+INSERT INTO USERS (first_name, last_name, email, password, phone, address) VALUES ('John', 'Doe', 'john.doe@example.com', 'password', '1234567890', 'USA');
+INSERT INTO ITEM (title, image_url, price, stock) VALUES ('FRENCH ED TALMUD 51 -SHEVUOS', 'https://www.sifreiorhachaim.co.il/wp-content/uploads/2024/03/FTSHE.jpg', 10.0, 100);
+INSERT INTO ITEM (title, image_url, price, stock) VALUES ('CHILDREN CHASSIDIC MACHZOR', 'https://www.sifreiorhachaim.co.il/wp-content/smush-webp/2021/10/5721076.jpg.webp', 20.0, 1);
+INSERT INTO ITEM (title, image_url, price, stock) VALUES ('MAH RH ASHK DELIVRANCE אשכנז קשה', 'https://www.sifreiorhachaim.co.il/wp-content/smush-webp/2021/03/6140120.jpg.webp', 20.0, 1);

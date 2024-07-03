@@ -1,0 +1,43 @@
+package com.example.shopping.service;
+
+import com.example.shopping.model.User;
+import com.example.shopping.repository.FavoriteRepository;
+import com.example.shopping.repository.OrderRepository;
+import com.example.shopping.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+    
+    public User createUser(User user) {
+        // Implement create user logic here
+        return userRepository.save(user);
+    }
+
+    public User authenticateUser(User user) {
+        User foundUser = userRepository.findByEmail(user.getEmail());
+        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            return foundUser;
+        }
+        throw new RuntimeException("Invalid credentials");
+    }
+
+    public User getUserDetails(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    public void deleteUser(Long userId) {
+        orderRepository.deleteByUserId(userId);
+        favoriteRepository.deleteByUserId(userId);
+        userRepository.deleteById(userId);
+    }
+}
+
